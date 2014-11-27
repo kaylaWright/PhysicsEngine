@@ -1,0 +1,96 @@
+﻿Build started 2014-11-26 11:17:22 PM.
+     1>Project "C:\Users\Jack\Other\Desktop\BulletPlayGround\BulletDynamics\BulletDynamics.vcxproj" on node 4 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\..\src /Zi /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /Gm- /EHsc /RTC1 /MDd /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Fo"obj\x32\Debug\BulletDynamics\\" /Fd"C:\Users\Jack\Other\Desktop\BulletPlayGround\\bin\BulletDynamics_vs2010_debug.pdb" /Gd /TP /analyze- /errorReport:prompt /MP Character\btKinematicCharacterController.cpp ConstraintSolver\btConeTwistConstraint.cpp ConstraintSolver\btContactConstraint.cpp ConstraintSolver\btFixedConstraint.cpp ConstraintSolver\btGearConstraint.cpp ConstraintSolver\btGeneric6DofConstraint.cpp ConstraintSolver\btGeneric6DofSpring2Constraint.cpp ConstraintSolver\btGeneric6DofSpringConstraint.cpp ConstraintSolver\btHinge2Constraint.cpp ConstraintSolver\btHingeConstraint.cpp ConstraintSolver\btNNCGConstraintSolver.cpp ConstraintSolver\btPoint2PointConstraint.cpp ConstraintSolver\btSequentialImpulseConstraintSolver.cpp ConstraintSolver\btSliderConstraint.cpp ConstraintSolver\btSolve2LinearConstraint.cpp ConstraintSolver\btTypedConstraint.cpp ConstraintSolver\btUniversalConstraint.cpp Dynamics\btDiscreteDynamicsWorld.cpp Dynamics\btRigidBody.cpp Dynamics\btSimpleDynamicsWorld.cpp Featherstone\btMultiBody.cpp Featherstone\btMultiBodyConstraint.cpp Featherstone\btMultiBodyConstraintSolver.cpp Featherstone\btMultiBodyDynamicsWorld.cpp Featherstone\btMultiBodyJointLimitConstraint.cpp Featherstone\btMultiBodyJointMotor.cpp Featherstone\btMultiBodyPoint2Point.cpp MLCPSolvers\btDantzigLCP.cpp MLCPSolvers\btLemkeAlgorithm.cpp MLCPSolvers\btMLCPSolver.cpp Vehicle\btRaycastVehicle.cpp Vehicle\btWheelInfo.cpp
+         btKinematicCharacterController.cpp
+         btConeTwistConstraint.cpp
+         btContactConstraint.cpp
+         btFixedConstraint.cpp
+         btGearConstraint.cpp
+         btGeneric6DofConstraint.cpp
+         btGeneric6DofSpring2Constraint.cpp
+         btGeneric6DofSpringConstraint.cpp
+     1>ConstraintSolver\btGeneric6DofSpring2Constraint.cpp(775): warning C4244: 'initializing' : conversion from 'double' to 'btScalar', possible loss of data
+     1>ConstraintSolver\btGeneric6DofSpring2Constraint.cpp(781): warning C4244: 'initializing' : conversion from 'double' to 'btScalar', possible loss of data
+     1>ConstraintSolver\btGeneric6DofSpring2Constraint.cpp(782): warning C4244: 'initializing' : conversion from 'double' to 'btScalar', possible loss of data
+     1>ConstraintSolver\btGeneric6DofSpring2Constraint.cpp(790): warning C4244: '=' : conversion from 'double' to 'btScalar', possible loss of data
+         btHinge2Constraint.cpp
+         btHingeConstraint.cpp
+         btNNCGConstraintSolver.cpp
+         btPoint2PointConstraint.cpp
+         btSequentialImpulseConstraintSolver.cpp
+         btSliderConstraint.cpp
+         btSolve2LinearConstraint.cpp
+         btTypedConstraint.cpp
+     1>ConstraintSolver\btHingeConstraint.cpp(306): warning C4244: 'argument' : conversion from 'double' to 'btScalar', possible loss of data
+         btUniversalConstraint.cpp
+         btDiscreteDynamicsWorld.cpp
+         btRigidBody.cpp
+         btSimpleDynamicsWorld.cpp
+         btMultiBody.cpp
+         btMultiBodyConstraint.cpp
+         btMultiBodyConstraintSolver.cpp
+         btMultiBodyDynamicsWorld.cpp
+         btMultiBodyJointLimitConstraint.cpp
+         btMultiBodyJointMotor.cpp
+         btMultiBodyPoint2Point.cpp
+         btDantzigLCP.cpp
+         btLemkeAlgorithm.cpp
+         btMLCPSolver.cpp
+         btRaycastVehicle.cpp
+         btWheelInfo.cpp
+     1>C:\Users\Jack\Other\Desktop\BulletPlayGround\LinearMath/btMatrixX.h(97): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data (MLCPSolvers\btLemkeAlgorithm.cpp)
+                 C:\Users\Jack\Other\Desktop\BulletPlayGround\LinearMath/btMatrixX.h(70) : while compiling class template member function 'float btVectorX<T>::nrm2(void) const'
+                 with
+                 [
+                     T=float
+                 ]
+                 MLCPSolvers\btLemkeAlgorithm.cpp(251) : see reference to function template instantiation 'float btVectorX<T>::nrm2(void) const' being compiled
+                 with
+                 [
+                     T=float
+                 ]
+                 c:\users\jack\other\desktop\bulletplayground\bulletdynamics\mlcpsolvers\btLemkeAlgorithm.h(86) : see reference to class template instantiation 'btVectorX<T>' being compiled
+                 with
+                 [
+                     T=float
+                 ]
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:"C:\Users\Jack\Other\Desktop\BulletPlayGround\\bin\BulletDynamics_vs2010_debug.lib" /NOLOGO /MACHINE:X86 obj\x32\Debug\BulletDynamics\btKinematicCharacterController.obj
+         obj\x32\Debug\BulletDynamics\btConeTwistConstraint.obj
+         obj\x32\Debug\BulletDynamics\btContactConstraint.obj
+         obj\x32\Debug\BulletDynamics\btFixedConstraint.obj
+         obj\x32\Debug\BulletDynamics\btGearConstraint.obj
+         obj\x32\Debug\BulletDynamics\btGeneric6DofConstraint.obj
+         obj\x32\Debug\BulletDynamics\btGeneric6DofSpring2Constraint.obj
+         obj\x32\Debug\BulletDynamics\btGeneric6DofSpringConstraint.obj
+         obj\x32\Debug\BulletDynamics\btHinge2Constraint.obj
+         obj\x32\Debug\BulletDynamics\btHingeConstraint.obj
+         obj\x32\Debug\BulletDynamics\btNNCGConstraintSolver.obj
+         obj\x32\Debug\BulletDynamics\btPoint2PointConstraint.obj
+         obj\x32\Debug\BulletDynamics\btSequentialImpulseConstraintSolver.obj
+         obj\x32\Debug\BulletDynamics\btSliderConstraint.obj
+         obj\x32\Debug\BulletDynamics\btSolve2LinearConstraint.obj
+         obj\x32\Debug\BulletDynamics\btTypedConstraint.obj
+         obj\x32\Debug\BulletDynamics\btUniversalConstraint.obj
+         obj\x32\Debug\BulletDynamics\btDiscreteDynamicsWorld.obj
+         obj\x32\Debug\BulletDynamics\btRigidBody.obj
+         obj\x32\Debug\BulletDynamics\btSimpleDynamicsWorld.obj
+         obj\x32\Debug\BulletDynamics\btMultiBody.obj
+         obj\x32\Debug\BulletDynamics\btMultiBodyConstraint.obj
+         obj\x32\Debug\BulletDynamics\btMultiBodyConstraintSolver.obj
+         obj\x32\Debug\BulletDynamics\btMultiBodyDynamicsWorld.obj
+         obj\x32\Debug\BulletDynamics\btMultiBodyJointLimitConstraint.obj
+         obj\x32\Debug\BulletDynamics\btMultiBodyJointMotor.obj
+         obj\x32\Debug\BulletDynamics\btMultiBodyPoint2Point.obj
+         obj\x32\Debug\BulletDynamics\btDantzigLCP.obj
+         obj\x32\Debug\BulletDynamics\btLemkeAlgorithm.obj
+         obj\x32\Debug\BulletDynamics\btMLCPSolver.obj
+         obj\x32\Debug\BulletDynamics\btRaycastVehicle.obj
+         obj\x32\Debug\BulletDynamics\btWheelInfo.obj
+         BulletDynamics.vcxproj -> C:\Users\Jack\Other\Desktop\BulletPlayGround\\bin\BulletDynamics_vs2010_debug.lib
+     1>Done Building Project "C:\Users\Jack\Other\Desktop\BulletPlayGround\BulletDynamics\BulletDynamics.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.81
