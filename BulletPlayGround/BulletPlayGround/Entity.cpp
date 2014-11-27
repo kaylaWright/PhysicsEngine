@@ -12,6 +12,15 @@ void Entity::AddComponent(const std::string _name, Component* component)
 	//m_Components.push_back(component);
 }
 
+Component* Entity::GetComponentByKey(std::string _key)
+{
+	map_IT temp = m_Components.find(_key);
+	
+	if(temp != m_Components.end())
+		return temp->second;
+	else
+		return NULL;
+}
 
 void Entity::RemoveComponent(Component* component)
 {

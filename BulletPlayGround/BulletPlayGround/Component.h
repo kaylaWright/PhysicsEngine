@@ -1,12 +1,15 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include <cstdlib>
+#include <time.h>
+
 class Entity;
 
 class Component
 {
 public:
-	Component() : m_Owner(nullptr) {}
+	Component() : m_Owner(nullptr) { srand(time(NULL)); }
 	virtual ~Component() {}
 
 	virtual void Init() {}

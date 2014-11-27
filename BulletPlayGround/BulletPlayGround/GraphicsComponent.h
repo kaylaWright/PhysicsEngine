@@ -2,14 +2,20 @@
 #define GRAPHICSCOMPONENT_H
 
 #include "Component.h"
-#include "Math.h"
 
 enum GraphicShapeTypes { GST_Plane = 0, GST_Sphere, GST_Cube };
+enum Colours { RED = 0, ORANGE, YELLOW, GREEN, BLUE, VIOLET };
 
 class GraphicsComponent : public Component
 {
 public:
-	
+	typedef struct GVector3f 
+	{
+		float x;
+		float y;
+		float z;
+	};
+
 	GraphicShapeTypes componentType;
 
 	GraphicsComponent(GraphicShapeTypes _type); 
@@ -37,7 +43,8 @@ public:
 
 	void SetColour(float _r, float _g, float _b)
 	{ colour.x = _r; colour.y = _g; colour.z = _b; }
-	Vector3 GetColour()
+	void SetRandomColour();
+	GVector3f GetColour()
 	{ return colour; } 
 
 	void DrawPlane();
@@ -50,7 +57,7 @@ private:
 	float m_Width;
 	float m_Depth;
 
-	Vector3 colour;
+	GVector3f colour;
 protected:
 };
 

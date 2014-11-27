@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	// Create our SDL window.
-	window = SDL_CreateWindow(	"Totally Not Just Falling Stuff",
+	window = SDL_CreateWindow(	"Totally Not Just Falling Stuff : Not Runbow Either",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		screenWidth, screenHeight,
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 
 void InitGL()
 {
-	glClearColor(1, 1, 1, 1);
+	glClearColor(0, 0, 0, 1);
 	glViewport(0, 0, screenWidth, screenHeight);
 	glShadeModel(GL_SMOOTH);
 	glMatrixMode(GL_PROJECTION);
@@ -198,6 +198,15 @@ void Update(float dt)
 
 	//check paddle position. if it exceeds a certain x value, invert the linear velocity on the physics component and change the colour.
 	//oppose it if it is too low on the x value; still change colour.
+	if(paddle.GetPosition().x > 15.0f || paddle.GetPosition().x < -15.0f )
+	{
+		//cast downwards. 
+		PhysicsComponent* ptemp = dynamic_cast<PhysicsComponent*>(paddle.GetComponentByKey("physics"));
+		ptemp->GetRigidBody()->setLinearVelocity(-(ptemp->GetRigidBody()->getLinearVelocity()));
+
+		GraphicsComponent* gtemp = dynamic_cast<GraphicsComponent*>(paddle.GetComponentByKey("graphics"));
+		gtemp->SetRandomColour();
+	}
 
 	//check for collisions. 
 }

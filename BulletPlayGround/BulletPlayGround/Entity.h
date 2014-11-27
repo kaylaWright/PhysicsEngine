@@ -23,6 +23,7 @@ public:
 	~Entity() {}
 
 	void AddComponent(const std::string _name, Component* component);
+	Component* GetComponentByKey(std::string _key);
 	void RemoveComponent(Component* component);
 
 	void Update(float deltaTime);

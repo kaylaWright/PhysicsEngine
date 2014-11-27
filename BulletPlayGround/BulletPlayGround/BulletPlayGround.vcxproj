@@ -87,7 +87,6 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GraphicsComponent.h" />
-    <ClInclude Include="Math.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="PhysicsManager.h" />
   </ItemGroup>

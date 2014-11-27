@@ -7,6 +7,7 @@
 
 GraphicsComponent::GraphicsComponent(GraphicShapeTypes _type)
 {
+
 	componentType = _type;
 }
 
@@ -168,4 +169,31 @@ void GraphicsComponent::Render()
 		break;
 	}
 
+}
+
+void GraphicsComponent::SetRandomColour()
+{
+	int rnd = rand() % 6;
+
+	switch(rnd)
+	{
+	case RED:
+		SetColour(1.0f, 0.0f, 0.0f);
+		break;
+	case ORANGE:
+		SetColour(1.0f, 0.5f, 0.0f);
+		break;
+	case YELLOW: 
+		SetColour(1.0f, 1.0f, 0.0f);
+		break;
+	case GREEN:
+		SetColour(0.0f, 1.0f, 0.0f);
+		break;
+	case BLUE:
+		SetColour(0.0f, 0.0f, 1.0f);
+		break;
+	case VIOLET:
+		SetColour(0.25f, 0.0f, 0.25f);
+		break;
+	}
 }
