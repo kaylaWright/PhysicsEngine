@@ -35,7 +35,7 @@ void PhysicsComponent::CreateSphere()
 	btDefaultMotionState* fallMotionState =
                 new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(pos.x, pos.y, pos.z)));
 
-	btScalar mass = 1;
+	btScalar mass = m_Mass;
         btVector3 fallInertia(0, 0, 0);
         sphereShape->calculateLocalInertia(mass, fallInertia);
 
@@ -85,8 +85,6 @@ void PhysicsComponent::CreatePlane()
 		PhysicsManager::GetInstance()->AddPhysicsComponent(this);
 }
 
-
-
 void PhysicsComponent::Shutdown()
 {
 	//remove rigidBody from physics world
@@ -108,6 +106,8 @@ void PhysicsComponent::Update(float DeltaTime)
 		DebugPrint();
 	}
 }
+
+
 
 void PhysicsComponent::OnAddSingleResult(btManifoldPoint& cp,int partId0,int index0,const btCollisionObjectWrapper* collidedObjWrap,int collidedObjPartId,int collidedObjIndex)
 {

@@ -44,11 +44,11 @@ void PhysicsManager::Init()
 void PhysicsManager::Shutdown()
 {
 	// Clean up behind ourselves like good little programmers
-    delete m_broadphase;
+   /* delete m_broadphase;
     delete m_dispatcher;
     delete m_solver;
     delete m_collisionConfiguration;
-    delete m_dynamicsWorld;
+    delete m_dynamicsWorld;*/
 }
 
 void PhysicsManager::Update(float deltaTime)

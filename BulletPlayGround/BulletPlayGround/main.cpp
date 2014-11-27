@@ -34,6 +34,7 @@ float FRAMERATE = 1.0f/60.0f;
 
 //game objects.
 Entity paddle;
+Entity ball;
 
 int main(int argc, char **argv)
 {
@@ -80,28 +81,7 @@ int main(int argc, char **argv)
 	physicsManager = new PhysicsManager();
 	physicsManager->Init();
 
-	Entity::EVector3f pos;
-	pos.x = 0.0f;
-	pos.y = -15.0f;
-	pos.z = 0.0f;
-	paddle.SetPosition(pos);
-
-	PhysicsComponent* pc = new PhysicsComponent();
-	pc->SetOwner(&paddle);
-	pc->SetDimensions(2.5f, 0.75f, 1.5f);
-	pc->SetMass(5.0f);
-	pc->Init(RBST_Prism);
-	pc->GetRigidBody()->setLinearFactor(btVector3(1.0f, 0.0f, 0.0f));
-	pc->GetRigidBody()->setLinearVelocity(btVector3(5.0f, 0.0f, 0.0f));
-	paddle.AddComponent("physics", pc);
-
-	GraphicsComponent* gc = new GraphicsComponent(GST_Cube);
-	gc->Init();
-	gc->SetColour(0.0f, 1.0f, 0.0f);
-	gc->SetDimensions(2.5f, 0.75f, 1.5f);
-	paddle.AddComponent("graphics", gc);
-
-	entities.push_back(paddle);
+	LoadLevelOne();
 
 	// Main loop
 	do
@@ -117,7 +97,6 @@ int main(int argc, char **argv)
 
 	} while (game_running);
 
-	pc->Shutdown();
 	physicsManager->Shutdown();
 	return 0;
 }
@@ -136,6 +115,50 @@ void InitGL()
 void LoadLevelOne()
 {
 	//no obstacles; just a paddle and a ball.
+	//paddle.
+	Entity::EVector3f pos;
+	pos.x = 0.0f;
+	pos.y = -15.0f;
+	pos.z = 0.0f;
+	paddle.SetPosition(pos);
+
+	PhysicsComponent* pc = new PhysicsComponent();
+	pc->SetOwner(&paddle);
+	pc->SetDimensions(3.5f, 0.5f, 1.5f);
+	pc->SetMass(5.0f);
+	pc->Init(RBST_Prism);
+	pc->GetRigidBody()->setLinearFactor(btVector3(1.0f, 0.0f, 0.0f));
+	pc->GetRigidBody()->setLinearVelocity(btVector3(5.0f, 0.0f, 0.0f));
+	paddle.AddComponent("physics", pc);
+
+	GraphicsComponent* gc = new GraphicsComponent(GST_Cube);
+	gc->Init();
+	gc->SetRandomColour();
+	gc->SetDimensions(3.5f, 0.5f, 1.5f);
+	paddle.AddComponent("graphics", gc);
+
+	entities.push_back(paddle);
+
+	//ball
+	pos.y = 15.0f;
+	ball.SetPosition(pos);
+
+	pc = new PhysicsComponent();
+	pc->SetOwner(&ball);
+	pc->SetRadius(1.0f);
+	pc->SetMass(1.0f);
+	pc->Init(RBST_Sphere);
+	ball.AddComponent("physics", pc);
+
+	gc = new GraphicsComponent(GST_Sphere);
+	gc->Init();
+	gc->SetRandomColour();
+	gc->SetDimensions(2.5f, 0.75f, 1.5f);
+	gc->SetRadius(1.0f);
+	ball.AddComponent("graphics", gc);
+
+	entities.push_back(ball);
+	
 }
 
 void LoadLevelTwo()
@@ -145,10 +168,19 @@ void LoadLevelTwo()
 
 void ClearLevel()
 {
+	//empty all entities and delete them from the scene.
+	for(std::vector<Entity>::iterator it = entities.begin(); it != entities.end(); ++it)
+	{
+		(*it).RemoveAllComponents();
+		it = entities.erase(it);
+	}
 }
 
 void HandleEvents(SDL_Event* curEvent)
 {
+	GraphicsComponent* gtemp;
+	PhysicsComponent* ptemp;
+
 	switch (curEvent->type)
 	{
 	case SDL_QUIT:
@@ -176,6 +208,13 @@ void HandleEvents(SDL_Event* curEvent)
 			break;
 		//drop the ball.
 		case SDLK_SPACE:
+			ptemp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
+			ptemp->SetMass(1.0f);
+			break;
+		case SDLK_w:
+			//change the ball colour.
+			gtemp = dynamic_cast<GraphicsComponent*>(ball.GetComponentByKey("graphics"));
+			gtemp->CycleThroughColours();
 			break;
 		//exit.
 		case SDLK_ESCAPE:
@@ -206,6 +245,14 @@ void Update(float dt)
 
 		GraphicsComponent* gtemp = dynamic_cast<GraphicsComponent*>(paddle.GetComponentByKey("graphics"));
 		gtemp->SetRandomColour();
+	}
+
+	if(ball.GetPosition().y < -25)
+	{
+		PhysicsComponent* ptemp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
+		btTransform t = ptemp->GetRigidBody()->getCenterOfMassTransform();
+		t.setOrigin(btVector3(ball.GetPosition().x, 15.0f, ball.GetPosition().z));
+		ptemp->GetRigidBody()->setCenterOfMassTransform(t);
 	}
 
 	//check for collisions. 

@@ -5,7 +5,8 @@
 #include "../SDL2/include/SDL_opengl.h"
 #include <math.h>
 
-GraphicsComponent::GraphicsComponent(GraphicShapeTypes _type)
+GraphicsComponent::GraphicsComponent(GraphicShapeTypes _type) : RED(1.0f, 0.0f, 0.0f), ORANGE(1.0f, 0.5f, 0.0f), YELLOW(1.0f, 1.0f, 0.0f), 
+																GREEN(0.0f, 1.0f, 0.0f), BLUE(0.0f, 0.0f, 1.0f), VIOLET(0.25f, 0.0f, 0.25f)
 {
 
 	componentType = _type;
@@ -177,23 +178,61 @@ void GraphicsComponent::SetRandomColour()
 
 	switch(rnd)
 	{
-	case RED:
-		SetColour(1.0f, 0.0f, 0.0f);
+	case eRED:
+		currentColour = eRED;
+		SetColour(RED);
 		break;
-	case ORANGE:
-		SetColour(1.0f, 0.5f, 0.0f);
+	case eORANGE:
+		currentColour = eORANGE;
+		SetColour(ORANGE);
 		break;
-	case YELLOW: 
-		SetColour(1.0f, 1.0f, 0.0f);
+	case eYELLOW: 
+		currentColour = eYELLOW;
+		SetColour(YELLOW);
 		break;
-	case GREEN:
-		SetColour(0.0f, 1.0f, 0.0f);
+	case eGREEN:
+		currentColour = eGREEN;
+		SetColour(GREEN);
 		break;
-	case BLUE:
-		SetColour(0.0f, 0.0f, 1.0f);
+	case eBLUE:
+		currentColour = eBLUE;
+		SetColour(BLUE);
 		break;
-	case VIOLET:
-		SetColour(0.25f, 0.0f, 0.25f);
+	case eVIOLET:
+		currentColour = eVIOLET;
+		SetColour(VIOLET);
 		break;
 	}
+}
+
+void GraphicsComponent::CycleThroughColours()
+{
+	switch(currentColour)
+	{
+	case eRED:
+		currentColour = eORANGE;
+		SetColour(ORANGE);
+		break;
+	case eORANGE:
+		currentColour = eYELLOW;
+		SetColour(YELLOW);
+		break;
+	case eYELLOW: 
+		currentColour = eGREEN;
+		SetColour(GREEN);
+		break;
+	case eGREEN:
+		currentColour = eBLUE;
+		SetColour(BLUE);
+		break;
+	case eBLUE:
+		currentColour = eVIOLET;
+		SetColour(VIOLET);
+		break;
+	case eVIOLET:
+		currentColour = eRED;
+		SetColour(RED);
+		break;
+	}
+
 }

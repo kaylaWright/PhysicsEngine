@@ -25,6 +25,7 @@ public:
 	void AddComponent(const std::string _name, Component* component);
 	Component* GetComponentByKey(std::string _key);
 	void RemoveComponent(Component* component);
+	void RemoveAllComponents();
 
 	void Update(float deltaTime);
 	void Render();

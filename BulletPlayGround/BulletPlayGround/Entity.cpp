@@ -43,6 +43,11 @@ void Entity::RemoveComponent(Component* component)
 	//}
 }
 
+void Entity::RemoveAllComponents()
+{
+	m_Components.clear();
+}
+
 void Entity::Update(float deltaTime) 
 {
 	for(map_IT it = m_Components.begin(); it != m_Components.end(); ++it)
