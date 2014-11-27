@@ -11,10 +11,13 @@ void PhysicsComponent::Init(RigidBodyShapeTypes type)
 	Component::Init();
 	switch (type)
 	{
-	case PhysicsComponent::RBST_Plane:
+	case RBST_Prism:
+		CreatePrism();
+		break;
+	case RBST_Plane:
 		CreatePlane();
 		break;
-	case PhysicsComponent::RBST_Sphere:
+	case RBST_Sphere:
 		CreateSphere();
 		break;
 	default:
@@ -44,6 +47,27 @@ void PhysicsComponent::CreateSphere()
 		PhysicsManager::GetInstance()->AddPhysicsComponent(this);
 }
 
+void PhysicsComponent::CreatePrism()
+{
+	btCollisionShape* prismShape = new btBoxShape(btVector3(m_Width, m_Height, m_Depth));
+
+	Entity* entOwner = GetOwner();
+	Entity::EVector3f pos = entOwner->GetPosition();
+
+	btDefaultMotionState* fallMotionState =  new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(pos.x, pos.y, pos.z)));
+
+	btScalar mass = m_Mass; 
+	btVector3 fallInertia(0, 0, 0);
+	prismShape->calculateLocalInertia(mass, fallInertia);
+
+	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, prismShape, fallInertia);
+	m_rigidBody = new btRigidBody(fallRigidBodyCI);
+
+	m_rigidBody->setUserPointer(this);
+
+	PhysicsManager::GetInstance()->AddPhysicsComponent(this);
+}
+
 void PhysicsComponent::CreatePlane()
 {
 	btCollisionShape* planeShape = new btStaticPlaneShape(btVector3(0,1,0),1.0f);
@@ -61,26 +85,7 @@ void PhysicsComponent::CreatePlane()
 		PhysicsManager::GetInstance()->AddPhysicsComponent(this);
 }
 
-void PhysicsComponent::CreatePrism()
-{
-	btCollisionShape* prismShape = new btBoxShape(btVector3(m_Width, m_Height, m_Depth));
 
-	Entity* entOwner = GetOwner();
-	Entity::EVector3f pos = entOwner->GetPosition();
-
-	btDefaultMotionState* fallMotionState =  new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(pos.x, pos.y, pos.z)));
-
-	btScalar mass = 1; 
-	btVector3 fallInertia(0, 0, 0);
-	prismShape->calculateLocalInertia(mass, fallInertia);
-
-	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, prismShape, fallInertia);
-	m_rigidBody = new btRigidBody(fallRigidBodyCI);
-
-	m_rigidBody->setUserPointer(this);
-
-	PhysicsManager::GetInstance()->AddPhysicsComponent(this);
-}
 
 void PhysicsComponent::Shutdown()
 {

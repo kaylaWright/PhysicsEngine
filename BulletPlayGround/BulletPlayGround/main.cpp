@@ -8,6 +8,8 @@
 #include "PhysicsComponent.h"
 #include "GraphicsComponent.h"
 
+#include "../BulletDynamics/Dynamics/btRigidBody.h"
+
 // Game Loop variables
 bool game_running = true;
 
@@ -24,7 +26,14 @@ void HandleEvents(SDL_Event* curEvent);
 void Update(float dt);
 void Render(SDL_Window* window);
 
+void LoadLevelOne();
+void LoadLevelTwo();
+void ClearLevel();
+
 float FRAMERATE = 1.0f/60.0f;
+
+//game objects.
+Entity paddle;
 
 int main(int argc, char **argv)
 {
@@ -44,7 +53,7 @@ int main(int argc, char **argv)
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	// Create our SDL window.
-	window = SDL_CreateWindow(	"Physics Playground",
+	window = SDL_CreateWindow(	"Totally Not Just Falling Stuff",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		screenWidth, screenHeight,
@@ -71,36 +80,28 @@ int main(int argc, char **argv)
 	physicsManager = new PhysicsManager();
 	physicsManager->Init();
 
-	/*Entity ent;
-
-	PhysicsComponent* pc = new PhysicsComponent();
-	pc->SetOwner(&ent);
-	pc->Init(PhysicsComponent::RBST_Plane);
-	ent.AddComponent(pc);
-	entities.push_back(ent);*/
-
-	Entity ent2;
 	Entity::EVector3f pos;
 	pos.x = 0.0f;
-	pos.y = 15.0f;
+	pos.y = -15.0f;
 	pos.z = 0.0f;
-	ent2.SetPosition(pos);
+	paddle.SetPosition(pos);
 
 	PhysicsComponent* pc = new PhysicsComponent();
-	pc->SetOwner(&ent2);
-	pc->SetRadius(1.0f);
-	pc->Init(PhysicsComponent::RBST_Sphere);
-	ent2.AddComponent(pc);
+	pc->SetOwner(&paddle);
+	pc->SetDimensions(2.5f, 0.75f, 1.5f);
+	pc->SetMass(5.0f);
+	pc->Init(RBST_Prism);
+	pc->GetRigidBody()->setLinearFactor(btVector3(1.0f, 0.0f, 0.0f));
+	pc->GetRigidBody()->setLinearVelocity(btVector3(5.0f, 0.0f, 0.0f));
+	paddle.AddComponent(pc);
 
 	GraphicsComponent* gc = new GraphicsComponent(GST_Cube);
 	gc->Init();
 	gc->SetColour(0.0f, 1.0f, 0.0f);
-	gc->SetHeight(1.5f);
-	gc->SetDepth(0.75f);
-	gc->SetWidth(2.5f);
-	ent2.AddComponent(gc);
+	gc->SetDimensions(2.5f, 0.75f, 1.5f);
+	paddle.AddComponent(gc);
 
-	entities.push_back(ent2);
+	entities.push_back(paddle);
 
 	// Main loop
 	do
@@ -132,6 +133,20 @@ void InitGL()
 
 }
 
+void LoadLevelOne()
+{
+	//no obstacles; just a paddle and a ball.
+}
+
+void LoadLevelTwo()
+{
+	///two obstacles and paddle/ball -> can roll over paddle probably.
+}
+
+void ClearLevel()
+{
+}
+
 void HandleEvents(SDL_Event* curEvent)
 {
 	switch (curEvent->type)
@@ -149,9 +164,20 @@ void HandleEvents(SDL_Event* curEvent)
 	case SDL_KEYUP:
 		switch (curEvent->key.keysym.sym)
 		{
-		case SDLK_d:
+		//debug.
+		case SDLK_p:
 			PhysicsManager::GetInstance()->SetDebug( !PhysicsManager::GetInstance()->IsDebugOn() );
 			break;
+		//move ball left.
+		case SDLK_a:
+			break;
+		//move ball right.
+		case SDLK_d:
+			break;
+		//drop the ball.
+		case SDLK_SPACE:
+			break;
+		//exit.
 		case SDLK_ESCAPE:
 			game_running = false;
 			break;
@@ -169,6 +195,11 @@ void Update(float dt)
 	{
 		(*it).Update(dt);
 	}
+
+	//check paddle position. if it exceeds a certain x value, invert the linear velocity on the physics component and change the colour.
+	//oppose it if it is too low on the x value; still change colour.
+
+	//check for collisions. 
 }
 
 void Render(SDL_Window *window)

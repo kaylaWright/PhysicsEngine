@@ -6,12 +6,11 @@
 
 class btRigidBody;
 
+enum RigidBodyShapeTypes { RBST_Plane = 0, RBST_Sphere, RBST_Prism };
+
 class PhysicsComponent : public Component
 {
 public:
-
-	enum RigidBodyShapeTypes { RBST_Plane = 0, RBST_Sphere, RBST_Prism };
-
 	PhysicsComponent() : m_shapeType(RBST_Plane) {}
 	virtual ~PhysicsComponent() {}
 
@@ -38,8 +37,16 @@ public:
 	float GetDepth() const { return m_Depth;}
 	void SetDepth(float _depth) {m_Depth = _depth;}
 
+	void SetDimensions(float _w, float _d, float _h)
+	{ m_Width = _w; m_Depth = _d; m_Height = _h; }
+
 	double GetRadius() const { return m_Radius;}
 	void SetRadius(double radius) {m_Radius = radius;}
+
+	float GetMass() const 
+	{ return m_Mass; }
+	void SetMass(float _new)
+	{ m_Mass = _new; }
 private:
 	void CreatePlane();
 	void CreateSphere();
@@ -49,6 +56,7 @@ private:
 	float m_Height;
 	float m_Width;
 	float m_Depth;
+	float m_Mass;
 
 	//physics variables
 	btRigidBody* m_rigidBody;

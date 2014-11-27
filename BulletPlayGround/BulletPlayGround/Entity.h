@@ -3,6 +3,7 @@
 
 #include <vector>
 class Component;
+
 class Entity 
 {
 public:
@@ -18,7 +19,6 @@ public:
 	~Entity() {}
 
 	void AddComponent(Component *component);
-
 	void RemoveComponent(Component* component)
 	{
 		for(std::vector<Component*>::iterator it = m_Components.begin(); it != m_Components.end(); ++it)

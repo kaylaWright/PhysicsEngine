@@ -32,6 +32,9 @@ public:
 	float GetDepth() const { return m_Depth;}
 	void SetDepth(float _depth) {m_Depth = _depth;}
 
+	void SetDimensions(float _w, float _d, float _h)
+	{ m_Width = _w; m_Depth = _d; m_Height = _h; }
+
 	void SetColour(float _r, float _g, float _b)
 	{ colour.x = _r; colour.y = _g; colour.z = _b; }
 	Vector3 GetColour()
