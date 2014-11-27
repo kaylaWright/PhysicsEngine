@@ -93,13 +93,13 @@ int main(int argc, char **argv)
 	pc->Init(RBST_Prism);
 	pc->GetRigidBody()->setLinearFactor(btVector3(1.0f, 0.0f, 0.0f));
 	pc->GetRigidBody()->setLinearVelocity(btVector3(5.0f, 0.0f, 0.0f));
-	paddle.AddComponent(pc);
+	paddle.AddComponent("physics", pc);
 
 	GraphicsComponent* gc = new GraphicsComponent(GST_Cube);
 	gc->Init();
 	gc->SetColour(0.0f, 1.0f, 0.0f);
 	gc->SetDimensions(2.5f, 0.75f, 1.5f);
-	paddle.AddComponent(gc);
+	paddle.AddComponent("graphics", gc);
 
 	entities.push_back(paddle);
 

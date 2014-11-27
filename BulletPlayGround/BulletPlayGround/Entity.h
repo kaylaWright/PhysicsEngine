@@ -1,8 +1,12 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include <vector>
+#include <unordered_map>
+#include <string>
+
 class Component;
+
+typedef std::unordered_map<std::string, Component*>::iterator map_IT;
 
 class Entity 
 {
@@ -18,18 +22,8 @@ public:
 	Entity() {}
 	~Entity() {}
 
-	void AddComponent(Component *component);
-	void RemoveComponent(Component* component)
-	{
-		for(std::vector<Component*>::iterator it = m_Components.begin(); it != m_Components.end(); ++it)
-		{
-			if( (*it) == component)
-			{
-				it = m_Components.erase(it);
-				break;
-			}
-		}
-	}
+	void AddComponent(const std::string _name, Component* component);
+	void RemoveComponent(Component* component);
 
 	void Update(float deltaTime);
 	void Render();
@@ -42,7 +36,7 @@ public:
 	void SetDimensions(float _x, float _y, float _z)
 	{ m_Dimensions.x = _x; m_Dimensions.y = _y; m_Dimensions.z = _z; }
 private:
-	std::vector<Component*> m_Components;
+	std::unordered_map<std::string, Component*> m_Components;
 	EVector3f m_Position;
 
 	EVector3f m_Dimensions;

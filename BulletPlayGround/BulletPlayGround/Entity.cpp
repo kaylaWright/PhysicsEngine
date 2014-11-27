@@ -2,26 +2,60 @@
 #include "Component.h"
 
 
-void Entity::AddComponent(Component* component)
+void Entity::AddComponent(const std::string _name, Component* component)
 {
 	if(component->GetOwner() == nullptr)
 		component->SetOwner(this);
 
-	m_Components.push_back(component);
+	m_Components[_name] = component;
+
+	//m_Components.push_back(component);
+}
+
+
+void Entity::RemoveComponent(Component* component)
+{
+	for(map_IT it = m_Components.begin(); it != m_Components.end(); ++it)
+	{
+		if((*it).second == component)
+		{
+			it = m_Components.erase(it);
+			break;
+		}
+	}
+
+	//for(std::vector<Component*>::iterator it = m_Components.begin(); it != m_Components.end(); ++it)
+	//{
+	//	if( (*it) == component)
+	//	{
+	//		it = m_Components.erase(it);
+	//		break;
+	//	}
+	//}
 }
 
 void Entity::Update(float deltaTime) 
 {
-	for(std::vector<Component*>::iterator it = m_Components.begin(); it != m_Components.end(); ++it)
+	for(map_IT it = m_Components.begin(); it != m_Components.end(); ++it)
 	{
-		(*it)->Update(deltaTime);
+		(*it).second->Update(deltaTime);
 	}
+
+	//for(std::vector<Component*>::iterator it = m_Components.begin(); it != m_Components.end(); ++it)
+	//{
+	//	(*it)->Update(deltaTime);
+	//}
 }
 
 void Entity::Render()
 {
-	for(std::vector<Component*>::iterator it = m_Components.begin(); it != m_Components.end(); ++it)
+	for(map_IT it = m_Components.begin(); it != m_Components.end(); ++it)
 	{
-		(*it)->Render();
+		(*it).second->Render();
 	}
+
+	//for(std::vector<Component*>::iterator it = m_Components.begin(); it != m_Components.end(); ++it)
+	//{
+	//	(*it)->Render();
+	//}
 }
