@@ -259,13 +259,20 @@ void Update(float dt)
 	}
 
 	if(ball.GetPosition().y < -25)
-	{
+	{d
 		PhysicsComponent* ptemp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
 		btTransform t = ptemp->GetRigidBody()->getCenterOfMassTransform();
 		t.setOrigin(btVector3(0.0f, 15.0f, 0.0f));
 		ptemp->GetRigidBody()->setCenterOfMassTransform(t);
 		ptemp->GetRigidBody()->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
 		ptemp->GetRigidBody()->setGravity(btVector3(0.0f, 0.0f, 0.0f));
+	}
+
+	//basically stops ball from going offscreen.
+	if(ball.GetPosition().x < -15 || ball.GetPosition().x > 15)
+	{
+		PhysicsComponent* ptemp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
+		ptemp->GetRigidBody()->setLinearVelocity(-(ptemp->GetRigidBody()->getLinearVelocity()));
 	}
 
 	//check for collisions. 
