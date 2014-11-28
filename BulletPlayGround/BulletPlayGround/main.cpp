@@ -30,6 +30,8 @@ void LoadLevelOne();
 void LoadLevelTwo();
 void ClearLevel();
 
+void MovePaddle();
+
 float FRAMERATE = 1.0f/60.0f;
 
 //game objects.
@@ -124,17 +126,20 @@ void LoadLevelOne()
 
 	PhysicsComponent* pc = new PhysicsComponent();
 	pc->SetOwner(&paddle);
-	pc->SetDimensions(3.5f, 0.5f, 1.5f);
+	pc->SetDimensions(3.5f, 2.0f, 1.5f);
 	pc->SetMass(5.0f);
 	pc->Init(RBST_Prism);
 	pc->GetRigidBody()->setLinearFactor(btVector3(1.0f, 0.0f, 0.0f));
 	pc->GetRigidBody()->setLinearVelocity(btVector3(5.0f, 0.0f, 0.0f));
+	//pc->GetRigidBody()->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+	//pc->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+
 	paddle.AddComponent("physics", pc);
 
 	GraphicsComponent* gc = new GraphicsComponent(GST_Cube);
 	gc->Init();
 	gc->SetRandomColour();
-	gc->SetDimensions(3.5f, 0.5f, 1.5f);
+	gc->SetDimensions(3.5f, 2.0f, 1.5f);
 	paddle.AddComponent("graphics", gc);
 
 	entities.push_back(paddle);
@@ -148,6 +153,7 @@ void LoadLevelOne()
 	pc->SetRadius(1.0f);
 	pc->SetMass(1.0f);
 	pc->Init(RBST_Sphere);
+	pc->GetRigidBody()->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 	ball.AddComponent("physics", pc);
 
 	gc = new GraphicsComponent(GST_Sphere);
@@ -178,8 +184,7 @@ void ClearLevel()
 
 void HandleEvents(SDL_Event* curEvent)
 {
-	GraphicsComponent* gtemp;
-	PhysicsComponent* ptemp;
+	Component* temp;
 
 	switch (curEvent->type)
 	{
@@ -189,6 +194,16 @@ void HandleEvents(SDL_Event* curEvent)
 	case SDL_KEYDOWN:
 		switch (curEvent->key.keysym.sym)
 		{
+		//move ball left.
+		case SDLK_a:
+			temp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
+			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->applyForce(btVector3(-5.0f, 0.0f, 0.0f), dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->getCenterOfMassPosition());
+			break;
+		//move ball right.
+		case SDLK_d:
+			temp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
+			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->applyForce(btVector3(5.0f, 0.0f, 0.0f), dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->getCenterOfMassPosition());
+			break;
 		default:
 			break;
 		}
@@ -200,21 +215,16 @@ void HandleEvents(SDL_Event* curEvent)
 		case SDLK_p:
 			PhysicsManager::GetInstance()->SetDebug( !PhysicsManager::GetInstance()->IsDebugOn() );
 			break;
-		//move ball left.
-		case SDLK_a:
-			break;
-		//move ball right.
-		case SDLK_d:
-			break;
+
 		//drop the ball.
 		case SDLK_SPACE:
-			ptemp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
-			ptemp->SetMass(1.0f);
+			temp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
+			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->setGravity(btVector3(0.0f, -9.7f, 0.0f));
 			break;
 		case SDLK_w:
 			//change the ball colour.
-			gtemp = dynamic_cast<GraphicsComponent*>(ball.GetComponentByKey("graphics"));
-			gtemp->CycleThroughColours();
+			temp = dynamic_cast<GraphicsComponent*>(ball.GetComponentByKey("graphics"));
+			dynamic_cast<GraphicsComponent*>(temp)->CycleThroughColours();
 			break;
 		//exit.
 		case SDLK_ESCAPE:
@@ -230,6 +240,7 @@ void HandleEvents(SDL_Event* curEvent)
 void Update(float dt)
 {
 	physicsManager->Update(dt);
+
 	for(std::vector<Entity>::iterator it = entities.begin(); it != entities.end(); ++it)
 	{
 		(*it).Update(dt);
@@ -251,12 +262,15 @@ void Update(float dt)
 	{
 		PhysicsComponent* ptemp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
 		btTransform t = ptemp->GetRigidBody()->getCenterOfMassTransform();
-		t.setOrigin(btVector3(ball.GetPosition().x, 15.0f, ball.GetPosition().z));
+		t.setOrigin(btVector3(0.0f, 15.0f, 0.0f));
 		ptemp->GetRigidBody()->setCenterOfMassTransform(t);
+		ptemp->GetRigidBody()->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
+		ptemp->GetRigidBody()->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 	}
 
 	//check for collisions. 
 }
+
 
 void Render(SDL_Window *window)
 {

@@ -54,8 +54,8 @@ public:
 
 	void SetColour(GVector3f _new)
 	{ colour.x = _new.x; colour.y = _new.y; colour.z = _new.z; }
-	GVector3f GetColour()
-	{ return colour; } 
+	Colours GetColour()
+	{ return currentColour; } 
 	void SetRandomColour();
 	void CycleThroughColours();
 

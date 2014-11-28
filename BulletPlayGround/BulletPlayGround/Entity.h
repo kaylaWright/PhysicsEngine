@@ -29,6 +29,7 @@ public:
 
 	void Update(float deltaTime);
 	void Render();
+	void OnHit();
 
 	EVector3f GetPosition() const {return m_Position;}
 	void SetPosition(EVector3f pos) { m_Position = pos;}

@@ -33,8 +33,6 @@ public:
 	void Init();
 	void Shutdown();
 	
-	
-
 	void AddPhysicsComponent(PhysicsComponent* physComp);
 	void RemovePhysicsComponent(PhysicsComponent* physComp);
 
@@ -44,6 +42,9 @@ public:
 	{
 		return m_Instance;
 	}
+
+	btDiscreteDynamicsWorld* GetDynamicsWorld()
+	{ return m_dynamicsWorld; }
 
 	void SetDebug(bool isOn) { m_isDebugOn = isOn; }
 	bool IsDebugOn() const { return m_isDebugOn == true; }

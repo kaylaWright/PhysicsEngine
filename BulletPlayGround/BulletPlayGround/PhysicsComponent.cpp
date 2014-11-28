@@ -116,7 +116,7 @@ void PhysicsComponent::OnAddSingleResult(btManifoldPoint& cp,int partId0,int ind
 	if(physComp)
 	{
 		Entity* entOwner = physComp->GetOwner();
-		//entOwner->OnHit();
+		entOwner->OnHit();
 	}
 }
 

@@ -1,6 +1,6 @@
 #include "Entity.h"
 #include "Component.h"
-
+#include "PhysicsComponent.h"
 
 void Entity::AddComponent(const std::string _name, Component* component)
 {
@@ -72,4 +72,8 @@ void Entity::Render()
 	//{
 	//	(*it)->Render();
 	//}
+}
+
+void Entity::OnHit()
+{
 }

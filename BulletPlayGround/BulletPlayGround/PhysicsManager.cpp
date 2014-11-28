@@ -5,9 +5,10 @@
 
 PhysicsManager* PhysicsManager::m_Instance = nullptr;
 bool ContactProcCallback(btManifoldPoint& cp, void* body0, void* body1)
-	{
-		return true;
-	}
+{
+	return true;
+}
+
 btScalar ContactCallback::addSingleResult(btManifoldPoint& cp,	const btCollisionObjectWrapper* colObj0Wrap,int partId0,int index0,const btCollisionObjectWrapper* colObj1Wrap,int partId1,int index1)
 {
 		const btCollisionObject* colObj = colObj0Wrap->getCollisionObject();
