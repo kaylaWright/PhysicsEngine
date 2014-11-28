@@ -8,7 +8,7 @@
 GraphicsComponent::GraphicsComponent(GraphicShapeTypes _type) : RED(1.0f, 0.0f, 0.0f), ORANGE(1.0f, 0.5f, 0.0f), YELLOW(1.0f, 1.0f, 0.0f), 
 																GREEN(0.0f, 1.0f, 0.0f), BLUE(0.0f, 0.0f, 1.0f), VIOLET(0.25f, 0.0f, 0.25f)
 {
-
+	
 	componentType = _type;
 }
 
@@ -174,6 +174,7 @@ void GraphicsComponent::Render()
 
 void GraphicsComponent::SetRandomColour()
 {
+	
 	int rnd = rand() % 6;
 
 	switch(rnd)

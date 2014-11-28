@@ -9,7 +9,7 @@ class Entity;
 class Component
 {
 public:
-	Component() : m_Owner(nullptr) { srand(time(NULL)); }
+	Component() : m_Owner(nullptr) {  }
 	virtual ~Component() {}
 
 	virtual void Init() {}

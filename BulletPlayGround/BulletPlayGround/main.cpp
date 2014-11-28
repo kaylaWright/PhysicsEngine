@@ -38,8 +38,13 @@ float FRAMERATE = 1.0f/60.0f;
 Entity paddle;
 Entity ball;
 
+Entity obstacleOne;
+Entity obstacleTwo;
+
 int main(int argc, char **argv)
 {
+	srand(time(NULL));
+
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	SDL_Window* window;
@@ -83,7 +88,7 @@ int main(int argc, char **argv)
 	physicsManager = new PhysicsManager();
 	physicsManager->Init();
 
-	LoadLevelOne();
+	LoadLevelTwo();
 
 	// Main loop
 	do
@@ -169,7 +174,53 @@ void LoadLevelOne()
 
 void LoadLevelTwo()
 {
+	//paddle and ball required.
+	LoadLevelOne();
+
 	///two obstacles and paddle/ball -> can roll over paddle probably.
+	Entity::EVector3f pos;
+	pos.x = 10.0f;
+	pos.y = 5.0f;
+	pos.z = 0.0f;
+	obstacleOne.SetPosition(pos);
+
+	PhysicsComponent* pc = new PhysicsComponent();
+	pc->SetOwner(&obstacleOne);
+	pc->SetRadius(4.5f);
+	pc->SetMass(0.0f);
+	pc->Init(RBST_Sphere);
+	pc->GetRigidBody()->setCollisionFlags(1);
+	obstacleOne.AddComponent("physics", pc);
+
+	GraphicsComponent* gc = new GraphicsComponent(GST_Sphere);
+	gc->Init();
+	gc->SetRandomColour();
+	gc->SetRadius(4.5f);
+	obstacleOne.AddComponent("graphics", gc);
+
+	entities.push_back(obstacleOne);
+
+	//obstacle two.
+	pos.x = -5.0f;
+	pos.y = 0.0f;
+	pos.z = 0.0f;
+	obstacleTwo.SetPosition(pos);
+
+	pc = new PhysicsComponent();
+	pc->SetOwner(&obstacleTwo);
+	pc->SetDimensions(5.0f, 4.0f, 1.0f);
+	pc->SetMass(0.0f);
+	pc->Init(RBST_Prism);
+	pc->GetRigidBody()->setCollisionFlags(1);
+	obstacleTwo.AddComponent("physics", pc);
+
+	gc = new GraphicsComponent(GST_Cube);
+	gc->Init();
+	gc->SetDimensions(5.0f, 4.0f, 1.0f);
+	gc->SetRandomColour();
+	obstacleTwo.AddComponent("graphics", gc);
+
+	entities.push_back(obstacleTwo);
 }
 
 void ClearLevel()
@@ -259,7 +310,7 @@ void Update(float dt)
 	}
 
 	if(ball.GetPosition().y < -25)
-	{d
+	{
 		PhysicsComponent* ptemp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
 		btTransform t = ptemp->GetRigidBody()->getCenterOfMassTransform();
 		t.setOrigin(btVector3(0.0f, 15.0f, 0.0f));
