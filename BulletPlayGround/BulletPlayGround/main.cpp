@@ -32,6 +32,7 @@ void ClearLevel();
 
 void MovePaddle();
 void MoveBall();
+void DisplayText(std::string _str);
 
 //game objects.
 Entity paddle;
@@ -325,6 +326,7 @@ void Update(float dt)
 		}
 		else
 		{
+			DisplayText("Press Q to play again.");
 			//game over. Press Q to load level one again.
 			
 		}
@@ -382,6 +384,32 @@ void MoveBall()
 	{
 		ptemp->GetRigidBody()->setLinearVelocity(-(ptemp->GetRigidBody()->getLinearVelocity()));
 	}
+}
+
+void DisplayText(std::string _str)
+{
+	int lengthOfQuote;
+
+	glPushMatrix();
+
+	glTranslatef(screenWidth / 2 - 50, screenHeight / 2 - 50, 0.0f);
+
+	lengthOfQuote = (int)strlen(_str.c_str());
+	for (int i = 0; i < lengthOfQuote; i++)
+	{
+		glPushMatrix();
+
+		glTranslatef(-(lengthOfQuote*37), -(i*200), 0.0);
+		glColor3f(0.5f, 0.5f, 0.5f);
+		glutStrokeCharacter(GLUT_STROKE_ROMAN, _str.c_str()[i]);
+		std::cout <<  _str.c_str()[i] << std::endl;
+
+		glPopMatrix();
+	}
+
+	glPopMatrix();
+
+	std::cout << _str << std::endl;
 }
 
 void Render(SDL_Window *window)
