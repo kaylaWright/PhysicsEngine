@@ -19,6 +19,7 @@ public:
 
 	virtual void Update(float deltaTime);
 
+	virtual void OnContactProcCallback(btManifoldPoint& _mani, PhysicsComponent* _collidedObject);
 	virtual void OnAddSingleResult(btManifoldPoint& cp,int partId0,int index0,const btCollisionObjectWrapper* collidedObjWrap,int collidedObjPartId,int collidedObjIndex);
 
 	void DebugPrint();

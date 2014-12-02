@@ -1,4 +1,5 @@
 #include "PhysicsComponent.h"
+#include "GraphicsComponent.h"
 #include "PhysicsManager.h"
 #include "btBulletDynamicsCommon.h"
 #include <iostream>
@@ -23,6 +24,9 @@ void PhysicsComponent::Init(RigidBodyShapeTypes type)
 	default:
 		break;
 	}
+
+	m_rigidBody->setUserPointer(this);
+	PhysicsManager::GetInstance()->AddPhysicsComponent(this);
 }
 
 void PhysicsComponent::CreateSphere()
@@ -42,9 +46,8 @@ void PhysicsComponent::CreateSphere()
 	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, sphereShape, fallInertia);
         m_rigidBody = new btRigidBody(fallRigidBodyCI);
 
-		m_rigidBody->setUserPointer(this);
 		//add physicsbody to world
-		PhysicsManager::GetInstance()->AddPhysicsComponent(this);
+		
 }
 
 void PhysicsComponent::CreatePrism()
@@ -62,10 +65,6 @@ void PhysicsComponent::CreatePrism()
 
 	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, prismShape, fallInertia);
 	m_rigidBody = new btRigidBody(fallRigidBodyCI);
-
-	m_rigidBody->setUserPointer(this);
-
-	PhysicsManager::GetInstance()->AddPhysicsComponent(this);
 }
 
 void PhysicsComponent::CreatePlane()
@@ -80,9 +79,6 @@ void PhysicsComponent::CreatePlane()
     btRigidBody* planeRigidBody = new btRigidBody(planeRigidBodyCI);
 
 	m_rigidBody = planeRigidBody;
-
-	//add physicsbody to world
-		PhysicsManager::GetInstance()->AddPhysicsComponent(this);
 }
 
 void PhysicsComponent::Shutdown()
@@ -107,8 +103,6 @@ void PhysicsComponent::Update(float DeltaTime)
 	}
 }
 
-
-
 void PhysicsComponent::OnAddSingleResult(btManifoldPoint& cp,int partId0,int index0,const btCollisionObjectWrapper* collidedObjWrap,int collidedObjPartId,int collidedObjIndex)
 {
 	const btCollisionObject* colObj = collidedObjWrap->getCollisionObject();
@@ -117,6 +111,35 @@ void PhysicsComponent::OnAddSingleResult(btManifoldPoint& cp,int partId0,int ind
 	{
 		Entity* entOwner = physComp->GetOwner();
 		entOwner->OnHit();
+	}
+}
+
+void PhysicsComponent::OnContactProcCallback(btManifoldPoint& _mani, PhysicsComponent* _collidedObject)
+{
+	Entity* ent = _collidedObject->GetOwner();
+
+	if(ent)
+	{
+		btRigidBody* rigidBody = _collidedObject->GetRigidBody();
+		float mass = rigidBody->getInvMass();
+		//check to see if we collided with a static object
+		if(mass < 1.0f)
+		{
+			//check the colours.
+			GraphicsComponent* mytemp = dynamic_cast<GraphicsComponent*>(m_Owner->GetComponentByKey("graphics"));
+			GraphicsComponent* yourtemp = dynamic_cast<GraphicsComponent*>(_collidedObject->GetOwner()->GetComponentByKey("graphics"));
+
+			if(mytemp->currentColour == yourtemp->currentColour && abs(m_rigidBody->getLinearVelocity().getX()) > 0)
+			{
+				ent->hasBeenHit = true;
+				//next level.
+			}
+			else
+			{
+				m_rigidBody->applyCentralImpulse(btVector3(0.0f, 12.0f, 0.0f));
+				ent->hasBeenHit = false;
+			}
+		}
 	}
 }
 

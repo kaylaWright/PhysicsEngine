@@ -6,16 +6,32 @@
 PhysicsManager* PhysicsManager::m_Instance = nullptr;
 bool ContactProcCallback(btManifoldPoint& cp, void* body0, void* body1)
 {
+	const btCollisionObject* colObj0 = static_cast<btCollisionObject*>(body0);
+	const btCollisionObject* colObj1 = static_cast<btCollisionObject*>(body1);
+
+	if(colObj0 && colObj1)
+	{
+		PhysicsComponent* physComp0 = static_cast<PhysicsComponent*>(colObj0->getUserPointer());
+		PhysicsComponent* physComp1 = static_cast<PhysicsComponent*>(colObj1->getUserPointer());
+
+		if(physComp0)
+			physComp0->OnContactProcCallback(cp,physComp1);
+
+		if(physComp1)
+			physComp1->OnContactProcCallback(cp,physComp0);
+	}
+
 	return true;
 }
 
+//not in use.
 btScalar ContactCallback::addSingleResult(btManifoldPoint& cp,	const btCollisionObjectWrapper* colObj0Wrap,int partId0,int index0,const btCollisionObjectWrapper* colObj1Wrap,int partId1,int index1)
 {
-		const btCollisionObject* colObj = colObj0Wrap->getCollisionObject();
-		PhysicsComponent* physComp = static_cast<PhysicsComponent*>(colObj->getUserPointer());
-		
-		if(physComp)
-			physComp->OnAddSingleResult(cp,partId0,index0,colObj1Wrap,partId1,index1);
+		//const btCollisionObject* colObj = colObj0Wrap->getCollisionObject();
+		//PhysicsComponent* physComp = static_cast<PhysicsComponent*>(colObj->getUserPointer());
+		//
+		//if(physComp)
+		//	physComp->OnAddSingleResult(cp,partId0,index0,colObj1Wrap,partId1,index1);
 
 		return 0;
 }

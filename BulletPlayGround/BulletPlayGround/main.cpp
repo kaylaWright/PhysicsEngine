@@ -31,8 +31,7 @@ void LoadLevelTwo();
 void ClearLevel();
 
 void MovePaddle();
-
-float FRAMERATE = 1.0f/60.0f;
+void MoveBall();
 
 //game objects.
 Entity paddle;
@@ -40,6 +39,8 @@ Entity ball;
 
 Entity obstacleOne;
 Entity obstacleTwo;
+
+int currLevel;
 
 int main(int argc, char **argv)
 {
@@ -88,7 +89,10 @@ int main(int argc, char **argv)
 	physicsManager = new PhysicsManager();
 	physicsManager->Init();
 
-	LoadLevelTwo();
+	LoadLevelOne();
+	currLevel = 1;
+
+	DWORD prevTime = GetCurrentTime();
 
 	// Main loop
 	do
@@ -97,9 +101,13 @@ int main(int argc, char **argv)
 		{
 			HandleEvents(&curEvent);
 		}
-
-		Update(FRAMERATE);
 		
+		//time calcs.
+		DWORD currTime = GetCurrentTime();
+		float dt = (currTime - prevTime) * 0.001;
+		Update(dt);
+		prevTime = currTime;
+
 		Render(window);
 
 	} while (game_running);
@@ -132,7 +140,7 @@ void LoadLevelOne()
 	PhysicsComponent* pc = new PhysicsComponent();
 	pc->SetOwner(&paddle);
 	pc->SetDimensions(3.5f, 2.0f, 1.5f);
-	pc->SetMass(5.0f);
+	pc->SetMass(1.0f);
 	pc->Init(RBST_Prism);
 	pc->GetRigidBody()->setLinearFactor(btVector3(1.0f, 0.0f, 0.0f));
 	pc->GetRigidBody()->setLinearVelocity(btVector3(5.0f, 0.0f, 0.0f));
@@ -156,9 +164,11 @@ void LoadLevelOne()
 	pc = new PhysicsComponent();
 	pc->SetOwner(&ball);
 	pc->SetRadius(1.0f);
-	pc->SetMass(1.0f);
+	pc->SetMass(2.0f);
 	pc->Init(RBST_Sphere);
 	pc->GetRigidBody()->setGravity(btVector3(0.0f, 0.0f, 0.0f));
+	//always active. 
+	pc->GetRigidBody()->setActivationState(4);
 	ball.AddComponent("physics", pc);
 
 	gc = new GraphicsComponent(GST_Sphere);
@@ -167,9 +177,9 @@ void LoadLevelOne()
 	gc->SetDimensions(2.5f, 0.75f, 1.5f);
 	gc->SetRadius(1.0f);
 	ball.AddComponent("graphics", gc);
+	ball.hasBeenHit = false;
 
 	entities.push_back(ball);
-	
 }
 
 void LoadLevelTwo()
@@ -226,11 +236,7 @@ void LoadLevelTwo()
 void ClearLevel()
 {
 	//empty all entities and delete them from the scene.
-	for(std::vector<Entity>::iterator it = entities.begin(); it != entities.end(); ++it)
-	{
-		(*it).RemoveAllComponents();
-		it = entities.erase(it);
-	}
+	entities.clear();
 }
 
 void HandleEvents(SDL_Event* curEvent)
@@ -247,13 +253,16 @@ void HandleEvents(SDL_Event* curEvent)
 		{
 		//move ball left.
 		case SDLK_a:
+		case SDLK_LEFT:
 			temp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
-			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->applyForce(btVector3(-5.0f, 0.0f, 0.0f), dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->getCenterOfMassPosition());
+			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->applyCentralForce(btVector3(-10.0f, 0.0f, 0.0f));
+				//applyForce(btVector3(-5.0f, 0.0f, 0.0f), dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->getCenterOfMassPosition());
 			break;
 		//move ball right.
 		case SDLK_d:
+		case SDLK_RIGHT:
 			temp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
-			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->applyForce(btVector3(5.0f, 0.0f, 0.0f), dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->getCenterOfMassPosition());
+			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->applyCentralForce(btVector3(10.0f, 0.0f, 0.0f));
 			break;
 		default:
 			break;
@@ -266,13 +275,21 @@ void HandleEvents(SDL_Event* curEvent)
 		case SDLK_p:
 			PhysicsManager::GetInstance()->SetDebug( !PhysicsManager::GetInstance()->IsDebugOn() );
 			break;
-
+		case SDLK_q:
+			if(currLevel > 2)
+			{
+				ClearLevel();
+				LoadLevelOne();
+			}
+			break;
 		//drop the ball.
 		case SDLK_SPACE:
+		case SDLK_DOWN:
 			temp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
 			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->setGravity(btVector3(0.0f, -9.7f, 0.0f));
 			break;
 		case SDLK_w:
+		case SDLK_UP:
 			//change the ball colour.
 			temp = dynamic_cast<GraphicsComponent*>(ball.GetComponentByKey("graphics"));
 			dynamic_cast<GraphicsComponent*>(temp)->CycleThroughColours();
@@ -297,21 +314,62 @@ void Update(float dt)
 		(*it).Update(dt);
 	}
 
+	if(ball.hasBeenHit)
+	{
+		ClearLevel();
+		
+		if(currLevel == 1)
+		{
+			LoadLevelTwo();
+			
+		}
+		else
+		{
+			//game over. Press Q to load level one again.
+			
+		}
+
+		currLevel++;
+	}
+
+	MovePaddle();
+	MoveBall();
+}
+
+void MovePaddle()
+{
+	btRigidBody* ptemp = dynamic_cast<PhysicsComponent*>(paddle.GetComponentByKey("physics"))->GetRigidBody();
+
+	//make sure the speed is constant. 
+	if(ptemp->getLinearVelocity().getX() < 0.0f && ptemp->getLinearVelocity().getX() > -5.0f)
+	{
+		ptemp->setLinearVelocity(btVector3(-5.0f, 0.0f, 0.0f));
+	}
+
+	if(ptemp->getLinearVelocity().getX() > 0.0f && ptemp->getLinearVelocity().getX() < 5.0f)
+	{
+		ptemp->setLinearVelocity(btVector3(5.0f, 0.0f, 0.0f));
+	}
+
 	//check paddle position. if it exceeds a certain x value, invert the linear velocity on the physics component and change the colour.
 	//oppose it if it is too low on the x value; still change colour.
 	if(paddle.GetPosition().x > 15.0f || paddle.GetPosition().x < -15.0f )
 	{
-		//cast downwards. 
-		PhysicsComponent* ptemp = dynamic_cast<PhysicsComponent*>(paddle.GetComponentByKey("physics"));
-		ptemp->GetRigidBody()->setLinearVelocity(-(ptemp->GetRigidBody()->getLinearVelocity()));
+		ptemp->setLinearVelocity(-(ptemp->getLinearVelocity()));
 
 		GraphicsComponent* gtemp = dynamic_cast<GraphicsComponent*>(paddle.GetComponentByKey("graphics"));
 		gtemp->SetRandomColour();
 	}
+}
 
+void MoveBall()
+{
+	PhysicsComponent* ptemp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
+
+		//ball related.
 	if(ball.GetPosition().y < -25)
 	{
-		PhysicsComponent* ptemp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
+		
 		btTransform t = ptemp->GetRigidBody()->getCenterOfMassTransform();
 		t.setOrigin(btVector3(0.0f, 15.0f, 0.0f));
 		ptemp->GetRigidBody()->setCenterOfMassTransform(t);
@@ -322,13 +380,9 @@ void Update(float dt)
 	//basically stops ball from going offscreen.
 	if(ball.GetPosition().x < -15 || ball.GetPosition().x > 15)
 	{
-		PhysicsComponent* ptemp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
 		ptemp->GetRigidBody()->setLinearVelocity(-(ptemp->GetRigidBody()->getLinearVelocity()));
 	}
-
-	//check for collisions. 
 }
-
 
 void Render(SDL_Window *window)
 {

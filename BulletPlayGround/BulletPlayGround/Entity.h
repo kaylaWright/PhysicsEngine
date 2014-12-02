@@ -11,6 +11,7 @@ typedef std::unordered_map<std::string, Component*>::iterator map_IT;
 class Entity 
 {
 public:
+	bool hasBeenHit;
 
 	typedef struct EVector3f 
 	{
@@ -19,7 +20,7 @@ public:
 		float z;
 	};
 
-	Entity() {}
+	Entity() : hasBeenHit(false) {}
 	~Entity() {}
 
 	void AddComponent(const std::string _name, Component* component);
