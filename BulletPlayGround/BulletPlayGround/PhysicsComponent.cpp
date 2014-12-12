@@ -136,7 +136,7 @@ void PhysicsComponent::OnContactProcCallback(btManifoldPoint& _mani, PhysicsComp
 			}
 			else
 			{
-				m_rigidBody->applyCentralImpulse(btVector3(0.0f, 12.0f, 0.0f));
+				m_rigidBody->applyCentralImpulse(btVector3(0.0f, 26.0f, 0.0f));
 				ent->hasBeenHit = false;
 			}
 		}

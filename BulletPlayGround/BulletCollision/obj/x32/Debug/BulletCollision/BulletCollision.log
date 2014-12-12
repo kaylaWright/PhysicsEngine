@@ -1,9 +1,9 @@
-﻿Build started 2014-11-27 2:03:43 PM.
-     1>Project "C:\Users\Jack\PhysicsEngine\BulletPlayGround\BulletCollision\BulletCollision.vcxproj" on node 2 (Build target(s)).
+﻿Build started 12/12/2014 8:23:47 AM.
+     1>Project "C:\Users\sctcad\PhysicsEngine\BulletPlayGround\BulletCollision\BulletCollision.vcxproj" on node 2 (Build target(s)).
      1>Lib:
-         BulletCollision.vcxproj -> C:\Users\Jack\PhysicsEngine\BulletPlayGround\\bin\BulletCollision_vs2010_debug.lib
-     1>Done Building Project "C:\Users\Jack\PhysicsEngine\BulletPlayGround\BulletCollision\BulletCollision.vcxproj" (Build target(s)).
+         BulletCollision.vcxproj -> C:\Users\sctcad\PhysicsEngine\BulletPlayGround\\bin\BulletCollision_vs2010_debug.lib
+     1>Done Building Project "C:\Users\sctcad\PhysicsEngine\BulletPlayGround\BulletCollision\BulletCollision.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.16
+Time Elapsed 00:00:00.13

@@ -165,7 +165,7 @@ void LoadLevelOne()
 	pc = new PhysicsComponent();
 	pc->SetOwner(&ball);
 	pc->SetRadius(1.0f);
-	pc->SetMass(2.0f);
+	pc->SetMass(1.5f);
 	pc->Init(RBST_Sphere);
 	pc->GetRigidBody()->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 	//always active. 
@@ -236,6 +236,13 @@ void LoadLevelTwo()
 
 void ClearLevel()
 {
+	/*std::vector<Entity>::iterator it;
+	for(it = entities.begin(); it != entities.end(); ++it)
+	{
+		PhysicsComponent* temp =  dynamic_cast<PhysicsComponent*>(it->GetComponentByKey("physics"));
+		physicsManager->RemovePhysicsComponent(temp);
+	}
+*/
 	//empty all entities and delete them from the scene.
 	entities.clear();
 }
@@ -256,14 +263,14 @@ void HandleEvents(SDL_Event* curEvent)
 		case SDLK_a:
 		case SDLK_LEFT:
 			temp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
-			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->applyCentralForce(btVector3(-10.0f, 0.0f, 0.0f));
+			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->applyCentralForce(btVector3(-75.0f, 0.0f, 0.0f));
 				//applyForce(btVector3(-5.0f, 0.0f, 0.0f), dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->getCenterOfMassPosition());
 			break;
 		//move ball right.
 		case SDLK_d:
 		case SDLK_RIGHT:
 			temp = dynamic_cast<PhysicsComponent*>(ball.GetComponentByKey("physics"));
-			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->applyCentralForce(btVector3(10.0f, 0.0f, 0.0f));
+			dynamic_cast<PhysicsComponent*>(temp)->GetRigidBody()->applyCentralForce(btVector3(75.0f, 0.0f, 0.0f));
 			break;
 		default:
 			break;
@@ -328,7 +335,6 @@ void Update(float dt)
 		{
 			DisplayText("Press Q to play again.");
 			//game over. Press Q to load level one again.
-			
 		}
 
 		currLevel++;
@@ -355,7 +361,7 @@ void MovePaddle()
 
 	//check paddle position. if it exceeds a certain x value, invert the linear velocity on the physics component and change the colour.
 	//oppose it if it is too low on the x value; still change colour.
-	if(paddle.GetPosition().x > 15.0f || paddle.GetPosition().x < -15.0f )
+	if(paddle.GetPosition().x >= 15.0f || paddle.GetPosition().x <= -15.0f )
 	{
 		ptemp->setLinearVelocity(-(ptemp->getLinearVelocity()));
 

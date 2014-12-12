@@ -12,7 +12,8 @@ class PhysicsComponent : public Component
 {
 public:
 	PhysicsComponent() : m_shapeType(RBST_Plane) {}
-	virtual ~PhysicsComponent() {}
+	 ~PhysicsComponent() 
+	 { delete m_rigidBody; }
 
 	void Init(RigidBodyShapeTypes type);
 	void Shutdown();
